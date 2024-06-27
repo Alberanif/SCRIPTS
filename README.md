@@ -1,2 +1,3 @@
 # SCRIPTS
-The main objetive of this repository is disponibilize some scripts coded in python that will help you to download videos, audio, build graphs and a lot more.
+The main objective of this repository is to provide various Python scripts that can help you download videos and audio, build graphs, and much more. 
+Feel free to contribute to the projects!
