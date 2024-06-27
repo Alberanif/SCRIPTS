@@ -1,0 +1,19 @@
+from pytube import YouTube
+
+def video_extraction(url, output):
+    try:
+        yt = YouTube(url)
+        
+        stream = yt.streams.get_highest_resolution()
+        
+        stream.download(output)
+        
+        print('Vídeo baixado com sucesso!')
+        
+    except Exception as e:
+        print(f'O seguinte erro ocorreu: {e}')
+
+url = r'video_url'
+output = r"output_path"
+
+video_extraction(url, output)
