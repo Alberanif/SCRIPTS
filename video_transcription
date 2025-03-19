@@ -1,0 +1,54 @@
+import subprocess
+# Executa comandos do terminal diretamente no código python
+import whisper
+
+# Criando a função que vai receber o arquivo mp4 e transformar em WAV
+def extrair_audio(video_path, audio_path='audio.wav'):
+
+    try:
+        comando = ["ffmpeg", "-i", video_path, "-ac", "1", "-ar", "16000", "-vn", audio_path, "-y"]
+        # Comandos que são executados no terminal para chamar a biblioteca ffmpeg
+
+        subprocess.run(comando, check=True) # Executa o comando no terminal 
+        # A função check irá exibir um erro caso o comando falhe no terminal
+
+        print(f'Áudio extraído com sucesso! \n {audio_path}')
+        return audio_path
+    except Exception as e:
+        print(f'Erro ao extrair o áudio: {e}')
+        return None
+
+# Executando o script
+arquivo_audio = extrair_audio('caminho_arquivo')
+
+def transcreve_audio(audio_path):
+
+    try:
+        # Carrega o modelo intermediário do whisper
+        model = whisper.load_model('base')
+
+        # Faz a transcrição do áudio de acordo com o idioma informado
+        transcricao = model.transcribe(audio_path, language='en')
+
+        # Retorna o texto transcrito
+        texto_transcrito = transcricao['text']
+        print(f'TRANSCRIÇÃO DE ÁUDIO: \n {texto_transcrito}')
+
+        return texto_transcrito
+    except Exception as e:
+        print(f'Não foi possível transcrever o áudio: {e}')
+
+        return None
+
+# Testando a transcrição
+transcription = transcreve_audio(arquivo_audio)
+
+# Salvando a transcrição
+def salvar_transcricao(transcricao, nome_arquivo='Transcrição.txt'):
+
+    with open(nome_arquivo, 'w', encoding='utf-8') as f:
+        f.write(transcricao)
+
+    print(f'Transcrição salva com sucesso! \n {nome_arquivo}')
+
+salvar_transcricao(transcription)
