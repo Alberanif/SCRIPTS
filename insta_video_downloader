@@ -1,0 +1,44 @@
+import re
+import instaloader
+import os
+
+# Função para extrair o shortcode do link do post
+
+def shortcode_extract(link):
+
+    padrao = r'https?://(?:www\.)?instagram\.com/reel/([^/]+)/?'
+
+    shortcode = re.search(padrao, link) # Qual o padrão procurar e onde procurar
+
+    if shortcode:
+        return shortcode.group(1)
+    return None
+
+if __name__ == '__main__':
+    link = input('Digite o link do post: ')
+    shortcode = shortcode_extract(link)
+
+    if not shortcode:
+        print('Não foi possível extrair o shortcode do link')
+    else:
+        print('Shortcode extraído:', shortcode)
+
+        # Criando uma instância do Instaloader
+
+        L = instaloader.Instaloader()
+
+        # Obtendo a publicação a partir do shortcode
+        try:
+            post = instaloader.Post.from_shortcode(L.context, shortcode)
+        except Exception as e:
+            print('Erro ao obter a publicação:', e)
+            exit(1)
+
+    # Downloado do post
+    target_dir = 'VIDEOS'
+
+    try:
+        L.download_post(post, target=target_dir)
+        print('Download realizado com sucesso')
+    except Exception as e:
+        print('Erro ao realizar o download:', e)
